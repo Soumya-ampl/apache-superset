@@ -1,0 +1,51 @@
+name: Docker Image CI
+'on':
+  push:
+    branches:
+      - develop
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.19.1
+      - name: checkout Repo
+        uses: actions/checkout@v3
+      # - name: Get SHA
+      #   id: get-sha
+      #   run: 'echo "::set-output name=sha::$(cat ./SHA)"'
+        
+      # - name: Get PR
+      #   id: get-pr
+      #   run: 'echo "::set-output name=num::$(cat ./PR-NUM)"'
+        
+      # - name: Configure AWS credentials
+      #   env: 
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ap-south-1
+      # - name: Login to Amazon ECR
+      #   id: login-ecr
+      #   uses: aws-actions/amazon-ecr-login@v1
+      - name: 'Load, tag and push image to ECR'
+        id: push-image
+        # env:
+        #   ECR_REGISTRY: '${{ steps.login-ecr.outputs.registry }}'
+        #   ECR_REPOSITORY: ampl-superset-dev
+        #   SHA: 159304208982.dkr.ecr.ap-south-1.amazonaws.com/ampl-superset-dev
+        #   IMAGE_TAG: superset-4
+        run: |
+          # echo "$SHA"
+          # echo "$ECR_REGISTRY"
+          # echo "$ECR_REPOSITORY"
+          # echo "$IMAGE_TAG"
+          # # docker load < $SHA.tar.gz
+          docker build . -t latest
+          # docker tag $ECR_REPOSITORY:$IMAGE_TAG $SHA:latest
+          # docker push $SHA:latest
